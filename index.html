@@ -1,0 +1,571 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Unban Request Automation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .main-content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .left-panel, .right-panel {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+        }
+
+        .section-title {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: 600;
+            border-bottom: 2px solid #25D366;
+            padding-bottom: 10px;
+        }
+
+        .gmail-block {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .gmail-block h4 {
+            color: #25D366;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #25D366;
+            box-shadow: 0 0 0 2px rgba(37, 211, 102, 0.2);
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
+        }
+
+        .controls {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .status-bar {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(37, 211, 102, 0.1);
+            color: #25D366;
+        }
+
+        .status-inactive {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .logs-container {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .log-entry {
+            padding: 12px;
+            border-bottom: 1px solid #f1f3f4;
+            font-size: 13px;
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .log-timestamp {
+            color: #666;
+            font-weight: 600;
+        }
+
+        .log-status-success {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .log-status-failed {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .log-gmail {
+            color: #007bff;
+            font-weight: 500;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
+
+        .alert-error {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔓 WhatsApp Unban Automation</h1>
+            <p>Automated email campaign system for WhatsApp account recovery</p>
+        </div>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <h3 class="section-title">📧 Gmail Account Configuration</h3>
+                
+                <div class="controls" style="margin-bottom: 20px;">
+                    <button class="btn btn-secondary" onclick="saveConfig()">💾 Save Configuration</button>
+                    <button class="btn btn-secondary" onclick="loadConfig()">📂 Load Saved Config</button>
+                </div>
+                
+                <div class="gmail-block">
+                    <h4>Gmail Account 1</h4>
+                    <div class="form-group">
+                        <label>Gmail ID:</label>
+                        <input type="email" id="gmail_id_1" placeholder="your.email@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label>App Password:</label>
+                        <input type="password" id="app_password_1" placeholder="16-character app password">
+                    </div>
+                </div>
+
+                <div class="gmail-block">
+                    <h4>Gmail Account 2</h4>
+                    <div class="form-group">
+                        <label>Gmail ID:</label>
+                        <input type="email" id="gmail_id_2" placeholder="your.email@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label>App Password:</label>
+                        <input type="password" id="app_password_2" placeholder="16-character app password">
+                    </div>
+                </div>
+
+                <div class="gmail-block">
+                    <h4>Gmail Account 3</h4>
+                    <div class="form-group">
+                        <label>Gmail ID:</label>
+                        <input type="email" id="gmail_id_3" placeholder="your.email@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label>App Password:</label>
+                        <input type="password" id="app_password_3" placeholder="16-character app password">
+                    </div>
+                </div>
+
+                <div class="gmail-block">
+                    <h4>Gmail Account 4</h4>
+                    <div class="form-group">
+                        <label>Gmail ID:</label>
+                        <input type="email" id="gmail_id_4" placeholder="your.email@gmail.com">
+                    </div>
+                    <div class="form-group">
+                        <label>App Password:</label>
+                        <input type="password" id="app_password_4" placeholder="16-character app password">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>WhatsApp Number to Unban:</label>
+                    <input type="text" id="whatsapp_number" placeholder="+91XXXXXXXXXX">
+                </div>
+
+                <div class="alert alert-success" style="margin-top: 15px;">
+                    📧 <strong>Email Templates:</strong> The system will automatically use 15 predefined professional email templates. Each email will randomly select from these templates to ensure variety and avoid spam detection.
+                </div>
+
+                <div class="controls">
+                    <button class="btn" onclick="startCampaign()">🚀 Start Campaign</button>
+                    <button class="btn btn-danger" onclick="stopCampaign()">⏹️ Stop Campaign</button>
+                    <button class="btn btn-secondary" onclick="testEmail()">🧪 Send Test Emails (40 total)</button>
+                </div>
+
+                <div id="alerts"></div>
+            </div>
+
+            <div class="right-panel">
+                <h3 class="section-title">📊 Campaign Status & Logs</h3>
+                
+                <div id="status-bar" class="status-bar status-inactive">
+                    ❌ Campaign Not Active
+                </div>
+
+                <div class="section-title">📝 Email Logs</div>
+                <div id="logs-container" class="logs-container">
+                    <div class="log-entry">
+                        <div class="log-timestamp">System ready - No logs yet</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let campaignActive = false;
+
+        async function saveConfig() {
+            if (!validateInputs()) return;
+
+            const data = collectFormData();
+
+            try {
+                const response = await fetch('/save_config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                showAlert(result.message, result.success ? 'success' : 'error');
+            } catch (error) {
+                showAlert('Error saving configuration: ' + error.message, 'error');
+            }
+        }
+
+        async function loadConfig() {
+            try {
+                const response = await fetch('/get_config');
+                const result = await response.json();
+                
+                if (result.config) {
+                    const config = result.config;
+                    
+                    // Load Gmail accounts
+                    for (let i = 1; i <= 4; i++) {
+                        const gmailField = document.getElementById(`gmail_id_${i}`);
+                        const passwordField = document.getElementById(`app_password_${i}`);
+                        
+                        if (config[`gmail_id_${i}`]) {
+                            gmailField.value = config[`gmail_id_${i}`];
+                        }
+                        if (config[`app_password_${i}`]) {
+                            passwordField.value = config[`app_password_${i}`];
+                        }
+                    }
+                    
+                    // Load WhatsApp number
+                    if (config.whatsapp_number) {
+                        document.getElementById('whatsapp_number').value = config.whatsapp_number;
+                    }
+                    
+                    showAlert('Configuration loaded successfully!', 'success');
+                } else {
+                    showAlert('No saved configuration found.', 'error');
+                }
+            } catch (error) {
+                showAlert('Error loading configuration: ' + error.message, 'error');
+            }
+        }
+
+        function showAlert(message, type) {
+            const alertsDiv = document.getElementById('alerts');
+            const alertClass = type === 'success' ? 'alert-success' : 'alert-error';
+            alertsDiv.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+            
+            setTimeout(() => {
+                alertsDiv.innerHTML = '';
+            }, 5000);
+        }
+
+        function validateInputs() {
+            const whatsappNumber = document.getElementById('whatsapp_number').value;
+            
+            if (!whatsappNumber) {
+                showAlert('WhatsApp number is required!', 'error');
+                return false;
+            }
+
+            let hasValidGmail = false;
+            for (let i = 1; i <= 4; i++) {
+                const gmailId = document.getElementById(`gmail_id_${i}`).value;
+                const appPassword = document.getElementById(`app_password_${i}`).value;
+                
+                if (gmailId && appPassword) {
+                    hasValidGmail = true;
+                    break;
+                }
+            }
+
+            if (!hasValidGmail) {
+                showAlert('At least one Gmail account is required!', 'error');
+                return false;
+            }
+
+            return true;
+        }
+
+        function collectFormData() {
+            const data = {
+                whatsapp_number: document.getElementById('whatsapp_number').value
+            };
+
+            for (let i = 1; i <= 4; i++) {
+                data[`gmail_id_${i}`] = document.getElementById(`gmail_id_${i}`).value;
+                data[`app_password_${i}`] = document.getElementById(`app_password_${i}`).value;
+            }
+
+            return data;
+        }
+
+        async function startCampaign() {
+            if (!validateInputs()) return;
+
+            const data = collectFormData();
+
+            try {
+                const response = await fetch('/start_campaign', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    campaignActive = true;
+                    updateStatusBar();
+                    showAlert(result.message, 'success');
+                } else {
+                    showAlert(result.message, 'error');
+                }
+            } catch (error) {
+                showAlert('Error starting campaign: ' + error.message, 'error');
+            }
+        }
+
+        async function stopCampaign() {
+            try {
+                const response = await fetch('/stop_campaign', {
+                    method: 'POST'
+                });
+
+                const result = await response.json();
+                
+                if (result.success) {
+                    campaignActive = false;
+                    updateStatusBar();
+                    showAlert(result.message, 'success');
+                } else {
+                    showAlert(result.message, 'error');
+                }
+            } catch (error) {
+                showAlert('Error stopping campaign: ' + error.message, 'error');
+            }
+        }
+
+        async function testEmail() {
+            if (!validateInputs()) return;
+
+            const data = collectFormData();
+
+            try {
+                const response = await fetch('/test_email', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                showAlert(result.message, result.success ? 'success' : 'error');
+            } catch (error) {
+                showAlert('Error sending test email: ' + error.message, 'error');
+            }
+        }
+
+        function updateStatusBar() {
+            const statusBar = document.getElementById('status-bar');
+            if (campaignActive) {
+                statusBar.textContent = '✅ Campaign Active - Emails scheduled for 6 AM, 12 PM, 6 PM';
+                statusBar.className = 'status-bar status-active';
+            } else {
+                statusBar.textContent = '❌ Campaign Not Active';
+                statusBar.className = 'status-bar status-inactive';
+            }
+        }
+
+        async function loadLogs() {
+            try {
+                const response = await fetch('/get_logs');
+                const result = await response.json();
+                
+                const logsContainer = document.getElementById('logs-container');
+                
+                if (result.logs.length === 0) {
+                    logsContainer.innerHTML = '<div class="log-entry"><div class="log-timestamp">No logs yet</div></div>';
+                    return;
+                }
+
+                logsContainer.innerHTML = result.logs.map(log => {
+                    const statusClass = log.status.includes('SUCCESS') ? 'log-status-success' : 'log-status-failed';
+                    return `
+                        <div class="log-entry">
+                            <div class="log-timestamp">${log.timestamp}</div>
+                            <div class="log-gmail">📧 ${log.gmail_id}</div>
+                            <div class="${statusClass}">${log.status}</div>
+                            ${log.template_used ? `<div style="color: #007bff; font-size: 12px;">📝 ${log.template_used}</div>` : ''}
+                            <div style="color: #666; font-size: 12px;">Recipients: ${log.recipients}</div>
+                        </div>
+                    `;
+                }).reverse().join('');
+                
+                // Auto scroll to top for latest logs
+                logsContainer.scrollTop = 0;
+            } catch (error) {
+                console.error('Error loading logs:', error);
+            }
+        }
+
+        // Load logs every 5 seconds
+        setInterval(loadLogs, 5000);
+        
+        // Load logs and config on page load
+        loadLogs();
+        loadConfig();
+    </script>
+</body>
+</html>
